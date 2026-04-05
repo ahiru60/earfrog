@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EarForge — Ear Training</title>
+    <title>Earfrog — Leap Your Ear Forward</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
@@ -15,25 +15,40 @@
   <body>
     <div class="app-shell">
       <header class="hero card">
-        <div>
-          <p class="eyebrow">EARFORGE</p>
-          <h1>Train your ear like an instrument.</h1>
+        <div class="hero-copy-wrap">
+          <p class="eyebrow">EARFROG</p>
+          <h1>Leap your ear forward.</h1>
           <p class="hero-copy">
-            Fast, musical drills for intervals, chords, and scales. No login. Just press play and answer.
+            A brighter, game-like ear trainer for intervals, chords, and scales. Hit play, trust your ears,
+            build streaks, and collect clean little wins.
           </p>
+          <div class="hero-actions">
+            <button id="heroStartBtn" class="primary-btn">Start a round</button>
+            <button id="dailyChallengeBtn" class="secondary-btn">Daily challenge</button>
+          </div>
         </div>
-        <div class="hero-stats">
-          <div class="stat">
-            <span class="stat-label">Streak</span>
-            <strong id="streakValue">0 days</strong>
+
+        <div class="hero-side">
+          <div class="frog-orb">
+            <div class="frog-face">
+              <span class="eye eye-left"></span>
+              <span class="eye eye-right"></span>
+              <span class="smile"></span>
+            </div>
           </div>
-          <div class="stat">
-            <span class="stat-label">Accuracy</span>
-            <strong id="accuracyValue">0%</strong>
-          </div>
-          <div class="stat">
-            <span class="stat-label">Total correct</span>
-            <strong id="correctValue">0</strong>
+          <div class="hero-stats">
+            <div class="stat">
+              <span class="stat-label">Streak</span>
+              <strong id="streakValue">0 days</strong>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Accuracy</span>
+              <strong id="accuracyValue">0%</strong>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Frog coins</span>
+              <strong id="coinsValue">0</strong>
+            </div>
           </div>
         </div>
       </header>
@@ -41,25 +56,25 @@
       <main class="main-grid">
         <section class="card control-panel">
           <div class="section-head">
-            <h2>Session setup</h2>
-            <button id="resetProgressBtn" class="ghost-btn">Reset progress</button>
+            <h2>Game setup</h2>
+            <button id="resetProgressBtn" class="ghost-btn">Reset</button>
           </div>
 
           <div class="control-group">
-            <label for="exerciseSelect">Exercise</label>
+            <label for="exerciseSelect">Mode</label>
             <select id="exerciseSelect">
-              <option value="interval">Interval recognition</option>
-              <option value="chord">Chord quality</option>
-              <option value="scale">Scale / mode</option>
+              <option value="interval">Interval safari</option>
+              <option value="chord">Chord pond</option>
+              <option value="scale">Scale trail</option>
             </select>
           </div>
 
           <div class="control-group">
             <label for="difficultySelect">Difficulty</label>
             <select id="difficultySelect">
-              <option value="easy">Easy</option>
-              <option value="medium" selected>Medium</option>
-              <option value="hard">Hard</option>
+              <option value="easy">Sprout</option>
+              <option value="medium" selected>Pond</option>
+              <option value="hard">Storm</option>
             </select>
           </div>
 
@@ -68,7 +83,7 @@
             <select id="instrumentSelect">
               <option value="sine">Pure tone</option>
               <option value="triangle">Soft synth</option>
-              <option value="square">Bright synth</option>
+              <option value="square">Bright arcade</option>
             </select>
           </div>
 
@@ -77,19 +92,22 @@
             <button id="replayBtn" class="secondary-btn">Replay</button>
           </div>
 
-          <div class="tip-box">
-            <strong>Minimum useful habit:</strong>
-            <span>Do 10 focused questions a day. Consistency beats marathon sessions.</span>
+          <div class="tip-box quest-box">
+            <strong>Today’s quest</strong>
+            <span id="questText">Answer 10 questions with focus. Clean reps over random guessing.</span>
           </div>
         </section>
 
         <section class="card challenge-panel">
           <div class="section-head">
             <div>
-              <p class="eyebrow">CURRENT ROUND</p>
-              <h2 id="exerciseTitle">Interval recognition</h2>
+              <p class="eyebrow">ACTIVE ROUND</p>
+              <h2 id="exerciseTitle">Interval safari</h2>
             </div>
-            <div class="pill" id="questionCounter">0 answered</div>
+            <div class="pill-stack">
+              <div class="pill" id="questionCounter">0 answered</div>
+              <div class="pill combo-pill" id="comboPill">Combo x0</div>
+            </div>
           </div>
 
           <p id="promptText" class="prompt-text">
@@ -111,8 +129,8 @@
 
         <section class="card insights-panel">
           <div class="section-head">
-            <h2>Progress</h2>
-            <div class="pill" id="levelPill">Level: medium</div>
+            <h2>Scoreboard</h2>
+            <div class="pill" id="levelPill">Pond</div>
           </div>
 
           <div class="progress-list">
@@ -125,18 +143,22 @@
               <strong id="bestStreak">0 days</strong>
             </div>
             <div class="progress-row">
-              <span>Current exercise</span>
+              <span>Current mode</span>
               <strong id="exerciseAccuracy">0% correct</strong>
+            </div>
+            <div class="progress-row">
+              <span>Best combo</span>
+              <strong id="bestCombo">0</strong>
             </div>
           </div>
 
           <div class="mini-card">
-            <h3>How this works</h3>
+            <h3>How to win</h3>
             <ul>
-              <li>Intervals play two notes in sequence.</li>
-              <li>Chords play notes stacked together.</li>
-              <li>Scales / modes play ascending patterns.</li>
-              <li>Everything saves locally in your browser.</li>
+              <li>Correct answers build combo and coins.</li>
+              <li>Replay if you’re unsure — that’s not cheating.</li>
+              <li>Intervals are sequential, chords are stacked, scales rise.</li>
+              <li>Daily challenge picks a tougher mix for bonus points.</li>
             </ul>
           </div>
         </section>
