@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Earfrog — Leap Your Ear Forward</title>
+    <title>Earfrog — Focused Ear Training</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
@@ -17,25 +17,18 @@
       <header class="hero card">
         <div class="hero-copy-wrap">
           <p class="eyebrow">EARFROG</p>
-          <h1>Leap your ear forward.</h1>
+          <h1>Focused ear training for real musicianship.</h1>
           <p class="hero-copy">
-            A brighter, game-like ear trainer for intervals, chords, and scales. Hit play, trust your ears,
-            build streaks, and collect clean little wins.
+            Train interval recognition, chord quality, and scale hearing with clean playback, clear practice flow,
+            and lightweight progress tracking.
           </p>
           <div class="hero-actions">
-            <button id="heroStartBtn" class="primary-btn">Start a round</button>
-            <button id="dailyChallengeBtn" class="secondary-btn">Daily challenge</button>
+            <button id="heroStartBtn" class="primary-btn">Start practice</button>
+            <button id="dailyChallengeBtn" class="secondary-btn">Focused set</button>
           </div>
         </div>
 
         <div class="hero-side">
-          <div class="frog-orb">
-            <div class="frog-face">
-              <span class="eye eye-left"></span>
-              <span class="eye eye-right"></span>
-              <span class="smile"></span>
-            </div>
-          </div>
           <div class="hero-stats">
             <div class="stat">
               <span class="stat-label">Streak</span>
@@ -46,8 +39,8 @@
               <strong id="accuracyValue">0%</strong>
             </div>
             <div class="stat">
-              <span class="stat-label">Frog coins</span>
-              <strong id="coinsValue">0</strong>
+              <span class="stat-label">Correct</span>
+              <strong id="correctValue">0</strong>
             </div>
           </div>
         </div>
@@ -56,62 +49,62 @@
       <main class="main-grid">
         <section class="card control-panel">
           <div class="section-head">
-            <h2>Game setup</h2>
+            <h2>Practice setup</h2>
             <button id="resetProgressBtn" class="ghost-btn">Reset</button>
           </div>
 
           <div class="control-group">
-            <label for="exerciseSelect">Mode</label>
+            <label for="exerciseSelect">Exercise</label>
             <select id="exerciseSelect">
-              <option value="interval">Interval safari</option>
-              <option value="chord">Chord pond</option>
-              <option value="scale">Scale trail</option>
+              <option value="interval">Interval recognition</option>
+              <option value="chord">Chord quality</option>
+              <option value="scale">Scale / mode identification</option>
             </select>
           </div>
 
           <div class="control-group">
             <label for="difficultySelect">Difficulty</label>
             <select id="difficultySelect">
-              <option value="easy">Sprout</option>
-              <option value="medium" selected>Pond</option>
-              <option value="hard">Storm</option>
+              <option value="easy">Foundations</option>
+              <option value="medium" selected>Intermediate</option>
+              <option value="hard">Advanced</option>
             </select>
           </div>
 
           <div class="control-group">
-            <label for="instrumentSelect">Sound</label>
+            <label for="instrumentSelect">Playback</label>
             <select id="instrumentSelect">
               <option value="sine">Pure tone</option>
               <option value="triangle">Soft synth</option>
-              <option value="square">Bright arcade</option>
+              <option value="square">Bright synth</option>
             </select>
           </div>
 
           <div class="control-row two-up">
-            <button id="newQuestionBtn" class="primary-btn">New challenge</button>
+            <button id="newQuestionBtn" class="primary-btn">New example</button>
             <button id="replayBtn" class="secondary-btn">Replay</button>
           </div>
 
           <div class="tip-box quest-box">
-            <strong>Today’s quest</strong>
-            <span id="questText">Answer 10 questions with focus. Clean reps over random guessing.</span>
+            <strong>Practice note</strong>
+            <span id="questText">Use replay when needed. Careful listening matters more than speed.</span>
           </div>
         </section>
 
         <section class="card challenge-panel">
           <div class="section-head">
             <div>
-              <p class="eyebrow">ACTIVE ROUND</p>
-              <h2 id="exerciseTitle">Interval safari</h2>
+              <p class="eyebrow">CURRENT EXERCISE</p>
+              <h2 id="exerciseTitle">Interval recognition</h2>
             </div>
             <div class="pill-stack">
               <div class="pill" id="questionCounter">0 answered</div>
-              <div class="pill combo-pill" id="comboPill">Combo x0</div>
+              <div class="pill combo-pill" id="comboPill">Current streak 0</div>
             </div>
           </div>
 
           <p id="promptText" class="prompt-text">
-            Press <strong>New challenge</strong> to hear the first example.
+            Press <strong>New example</strong> to hear the first prompt.
           </p>
 
           <div class="transport-row">
@@ -123,14 +116,14 @@
 
           <div id="feedbackBox" class="feedback-box neutral">
             <strong>Status:</strong>
-            <span>Waiting for your first challenge.</span>
+            <span>Waiting for your first example.</span>
           </div>
         </section>
 
         <section class="card insights-panel">
           <div class="section-head">
-            <h2>Scoreboard</h2>
-            <div class="pill" id="levelPill">Pond</div>
+            <h2>Progress</h2>
+            <div class="pill" id="levelPill">Intermediate</div>
           </div>
 
           <div class="progress-list">
@@ -143,22 +136,22 @@
               <strong id="bestStreak">0 days</strong>
             </div>
             <div class="progress-row">
-              <span>Current mode</span>
+              <span>Current exercise</span>
               <strong id="exerciseAccuracy">0% correct</strong>
             </div>
             <div class="progress-row">
-              <span>Best combo</span>
+              <span>Best run</span>
               <strong id="bestCombo">0</strong>
             </div>
           </div>
 
           <div class="mini-card">
-            <h3>How to win</h3>
+            <h3>Practice guidance</h3>
             <ul>
-              <li>Correct answers build combo and coins.</li>
-              <li>Replay if you’re unsure — that’s not cheating.</li>
-              <li>Intervals are sequential, chords are stacked, scales rise.</li>
-              <li>Daily challenge picks a tougher mix for bonus points.</li>
+              <li>Intervals are played melodically, one note after another.</li>
+              <li>Chords are played harmonically, with notes stacked together.</li>
+              <li>Scales and modes are presented in ascending form.</li>
+              <li>Short, attentive sessions usually beat long unfocused ones.</li>
             </ul>
           </div>
         </section>

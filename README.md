@@ -1,15 +1,16 @@
 # Earfrog
 
-A playful static ear training web app with:
+A focused ear training web app for musicians.
+
+Current features:
 
 - interval recognition
-- chord quality drills
+- chord quality identification
 - scale / mode identification
-- combo system and coin score
-- daily challenge button
-- local streak + progress tracking
-- mobile-friendly responsive UI
-- Web Audio playback
+- clean Web Audio playback
+- replay and root reference playback
+- local streak and progress tracking
+- responsive interface for desktop and mobile
 
 ## Run locally
 
@@ -19,14 +20,15 @@ python3 -m http.server 8000
 
 Then open <http://localhost:8000>
 
-## Current vibe
+## Direction
 
-This version leans more game-like and fun while staying fast and lightweight.
+This version is intentionally more musical and serious: cleaner language, calmer visuals, and a stronger practice-first feel.
 
 ## Good next upgrades
 
-- better instrument samples
+- piano or sampled instrument playback
 - melodic dictation
-- rhythm drills
-- adaptive spaced repetition
-- GitHub Pages deploy
+- rhythm training
+- adaptive review / spaced repetition
+- session summaries and weak-spot tracking
+- GitHub Pages deployment

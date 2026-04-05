@@ -1,9 +1,9 @@
-const STORAGE_KEY = 'earfrog-progress-v2';
+const STORAGE_KEY = 'earfrog-progress-v3';
 
 const EXERCISES = {
   interval: {
-    title: 'Interval safari',
-    prompt: 'Hear two notes in sequence. Name the leap.',
+    title: 'Interval recognition',
+    prompt: 'Listen to the two notes and identify the interval.',
     pools: {
       easy: [
         { label: 'Minor 2nd', semitones: 1 },
@@ -44,18 +44,18 @@ const EXERCISES = {
         answer: answer.label,
         choices: makeChoices(pool, answer.label),
         play(audio, instrument) {
-          playNote(audio, root, 0.0, 0.72, instrument, 0.16);
-          playNote(audio, root + answer.semitones, 0.88, 0.72, instrument, 0.16);
+          playNote(audio, root, 0.0, 0.78, instrument, 0.16);
+          playNote(audio, root + answer.semitones, 0.95, 0.78, instrument, 0.16);
         },
         playReference(audio, instrument) {
-          playNote(audio, root, 0.0, 0.95, instrument, 0.17);
+          playNote(audio, root, 0.0, 1.0, instrument, 0.18);
         },
       };
     },
   },
   chord: {
-    title: 'Chord pond',
-    prompt: 'Hear the stack. Identify the chord flavor.',
+    title: 'Chord quality',
+    prompt: 'Listen to the chord and identify its quality.',
     pools: {
       easy: [
         { label: 'Major', intervals: [0, 4, 7] },
@@ -89,17 +89,17 @@ const EXERCISES = {
         answer: answer.label,
         choices: makeChoices(pool, answer.label),
         play(audio, instrument) {
-          answer.intervals.forEach((interval) => playNote(audio, root + interval, 0.0, 1.15, instrument, 0.13));
+          answer.intervals.forEach((interval) => playNote(audio, root + interval, 0.0, 1.12, instrument, 0.13));
         },
         playReference(audio, instrument) {
-          playNote(audio, root, 0.0, 0.95, instrument, 0.17);
+          playNote(audio, root, 0.0, 1.0, instrument, 0.18);
         },
       };
     },
   },
   scale: {
-    title: 'Scale trail',
-    prompt: 'Hear the ascent. Name the road it takes.',
+    title: 'Scale / mode identification',
+    prompt: 'Listen to the ascending pattern and identify the scale or mode.',
     pools: {
       easy: [
         { label: 'Major', pattern: [0, 2, 4, 5, 7, 9, 11, 12] },
@@ -132,10 +132,10 @@ const EXERCISES = {
         answer: answer.label,
         choices: makeChoices(pool, answer.label),
         play(audio, instrument) {
-          answer.pattern.forEach((step, index) => playNote(audio, root + step, index * 0.33, 0.28, instrument, 0.12));
+          answer.pattern.forEach((step, index) => playNote(audio, root + step, index * 0.35, 0.28, instrument, 0.12));
         },
         playReference(audio, instrument) {
-          playNote(audio, root, 0.0, 0.95, instrument, 0.17);
+          playNote(audio, root, 0.0, 1.0, instrument, 0.18);
         },
       };
     },
@@ -143,31 +143,31 @@ const EXERCISES = {
 };
 
 const difficultyLabels = {
-  easy: 'Sprout',
-  medium: 'Pond',
-  hard: 'Storm',
+  easy: 'Foundations',
+  medium: 'Intermediate',
+  hard: 'Advanced',
 };
 
-const questLines = [
-  'Answer 10 questions with focus. Clean reps over random guessing.',
-  'Build a combo of 5. Precision first, speed second.',
-  'Replay before guessing. Strong ears are trained, not rushed.',
-  'Clear one short round now. Tiny consistent wins compound fast.',
+const practiceNotes = [
+  'Use replay when needed. Careful listening matters more than speed.',
+  'Short, attentive practice is usually more effective than long distracted sessions.',
+  'If you miss one, listen again and notice what changed your perception.',
+  'Try to hear function and character, not just guess from memory.',
 ];
 
-const praiseLines = [
-  'Clean catch.',
-  'Nice ear.',
-  'Locked in.',
-  'That was sharp.',
-  'Good leap.',
+const positiveFeedback = [
+  'Correct.',
+  'Good.',
+  'Well heard.',
+  'Accurate.',
+  'Nicely identified.',
 ];
 
-const recoveryLines = [
-  'Misses are reps too.',
-  'Good — now your ear has contrast.',
-  'Take the replay and lock it in.',
-  'That one teaches something.',
+const correctiveFeedback = [
+  'Not quite.',
+  'Close, but not this time.',
+  'Missed that one.',
+  'Take another listen next round.',
 ];
 
 const state = {
@@ -193,7 +193,7 @@ const els = {
   promptText: document.getElementById('promptText'),
   streakValue: document.getElementById('streakValue'),
   accuracyValue: document.getElementById('accuracyValue'),
-  coinsValue: document.getElementById('coinsValue'),
+  correctValue: document.getElementById('correctValue'),
   questionCounter: document.getElementById('questionCounter'),
   comboPill: document.getElementById('comboPill'),
   levelPill: document.getElementById('levelPill'),
@@ -208,7 +208,7 @@ init();
 
 function init() {
   bindEvents();
-  rotateQuest();
+  rotatePracticeNote();
   refreshMeta();
   createQuestion();
 }
@@ -222,7 +222,7 @@ function bindEvents() {
   els.playReferenceBtn.addEventListener('click', () => playCurrent(true));
   els.resetProgressBtn.addEventListener('click', resetProgress);
   els.heroStartBtn.addEventListener('click', createQuestion);
-  els.dailyChallengeBtn.addEventListener('click', activateDailyChallenge);
+  els.dailyChallengeBtn.addEventListener('click', activateFocusedSet);
 }
 
 function handleModeChange() {
@@ -230,12 +230,12 @@ function handleModeChange() {
   createQuestion();
 }
 
-function activateDailyChallenge() {
+function activateFocusedSet() {
   const modes = ['interval', 'chord', 'scale'];
   const dayIndex = new Date().getDate() % modes.length;
   els.exerciseSelect.value = modes[dayIndex];
   els.difficultySelect.value = 'hard';
-  rotateQuest('Daily challenge: one hard round, no panic, trust the ear.');
+  rotatePracticeNote('Focused set: one advanced round with careful listening and no rushing.');
   refreshMeta();
   createQuestion();
 }
@@ -255,7 +255,7 @@ function createQuestion() {
   els.exerciseTitle.textContent = exercise.title;
   els.promptText.textContent = exercise.prompt;
   renderAnswers(question.choices);
-  setFeedback('Fresh prompt loaded. Press play if you want another listen.', 'neutral');
+  setFeedback('New example ready.', 'neutral');
   playCurrent(false);
 }
 
@@ -285,13 +285,12 @@ function submitAnswer(choice, buttonEl) {
 
   updateProgress(isCorrect);
 
-  const prefix = isCorrect ? sample(praiseLines) : sample(recoveryLines);
+  const lead = isCorrect ? sample(positiveFeedback) : sample(correctiveFeedback);
   const message = isCorrect
-    ? `${prefix} It was ${state.currentQuestion.answer}. +${coinReward()} coins.`
-    : `${prefix} Correct answer: ${state.currentQuestion.answer}.`;
+    ? `${lead} ${state.currentQuestion.answer}.`
+    : `${lead} Correct answer: ${state.currentQuestion.answer}.`;
 
   setFeedback(message, isCorrect ? 'correct' : 'wrong');
-
   window.setTimeout(createQuestion, 1050);
 }
 
@@ -304,9 +303,7 @@ function playCurrent(referenceOnly = false) {
 }
 
 function getAudioContext() {
-  if (!state.audioContext) {
-    state.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  }
+  if (!state.audioContext) state.audioContext = new (window.AudioContext || window.webkitAudioContext)();
   if (state.audioContext.state === 'suspended') state.audioContext.resume();
   return state.audioContext;
 }
@@ -342,7 +339,6 @@ function updateProgress(isCorrect) {
   if (isCorrect) {
     state.progress.correct += 1;
     state.progress.combo += 1;
-    state.progress.coins += coinReward();
   } else {
     state.progress.combo = 0;
   }
@@ -353,16 +349,11 @@ function updateProgress(isCorrect) {
   state.progress.byExercise[exerciseKey] = exerciseStats;
 
   state.progress.history[today] = (state.progress.history[today] || 0) + 1;
-  state.progress.lastActiveDay = today;
   state.progress.streak = computeCurrentStreak(state.progress.history);
   state.progress.bestStreak = Math.max(state.progress.bestStreak || 0, state.progress.streak);
 
   saveProgress();
   refreshMeta();
-}
-
-function coinReward() {
-  return 3 + Math.min(state.progress.combo || 0, 7);
 }
 
 function refreshMeta() {
@@ -373,9 +364,9 @@ function refreshMeta() {
 
   els.streakValue.textContent = `${state.progress.streak || 0} day${state.progress.streak === 1 ? '' : 's'}`;
   els.accuracyValue.textContent = `${totalAccuracy}%`;
-  els.coinsValue.textContent = String(state.progress.coins || 0);
+  els.correctValue.textContent = String(state.progress.correct || 0);
   els.questionCounter.textContent = `${state.progress.total || 0} answered`;
-  els.comboPill.textContent = `Combo x${state.progress.combo || 0}`;
+  els.comboPill.textContent = `Current streak ${state.progress.combo || 0}`;
   els.levelPill.textContent = difficultyLabels[els.difficultySelect.value];
   els.todayCount.textContent = `${state.progress.history[todayKey()] || 0} questions`;
   els.bestStreak.textContent = `${state.progress.bestStreak || 0} day${state.progress.bestStreak === 1 ? '' : 's'}`;
@@ -385,8 +376,8 @@ function refreshMeta() {
   els.promptText.textContent = EXERCISES[exerciseKey].prompt;
 }
 
-function rotateQuest(forcedText) {
-  els.questText.textContent = forcedText || sample(questLines);
+function rotatePracticeNote(forcedText) {
+  els.questText.textContent = forcedText || sample(practiceNotes);
 }
 
 function setFeedback(message, tone) {
@@ -407,9 +398,9 @@ function makeChoices(pool, answerLabel) {
 function loadProgress() {
   try {
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (stored) return { total: 0, correct: 0, combo: 0, bestCombo: 0, coins: 0, streak: 0, bestStreak: 0, byExercise: {}, history: {}, ...stored };
+    if (stored) return { total: 0, correct: 0, combo: 0, bestCombo: 0, streak: 0, bestStreak: 0, byExercise: {}, history: {}, ...stored };
   } catch (_) {}
-  return { total: 0, correct: 0, combo: 0, bestCombo: 0, coins: 0, streak: 0, bestStreak: 0, byExercise: {}, history: {} };
+  return { total: 0, correct: 0, combo: 0, bestCombo: 0, streak: 0, bestStreak: 0, byExercise: {}, history: {} };
 }
 
 function saveProgress() {
@@ -417,12 +408,12 @@ function saveProgress() {
 }
 
 function resetProgress() {
-  if (!window.confirm('Reset all Earfrog progress on this device?')) return;
-  state.progress = { total: 0, correct: 0, combo: 0, bestCombo: 0, coins: 0, streak: 0, bestStreak: 0, byExercise: {}, history: {} };
+  if (!window.confirm('Reset all progress on this device?')) return;
+  state.progress = { total: 0, correct: 0, combo: 0, bestCombo: 0, streak: 0, bestStreak: 0, byExercise: {}, history: {} };
   saveProgress();
-  rotateQuest();
+  rotatePracticeNote();
   refreshMeta();
-  setFeedback('Progress reset. Fresh pond, fresh ears.', 'neutral');
+  setFeedback('Progress reset.', 'neutral');
 }
 
 function computeCurrentStreak(history) {
