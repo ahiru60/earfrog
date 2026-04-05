@@ -308,26 +308,93 @@ function getAudioContext() {
   return state.audioContext;
 }
 
-function playNote(audio, midiNote, offsetSeconds, durationSeconds, waveType, gainAmount = 0.18) {
-  const oscillator = audio.createOscillator();
-  const gain = audio.createGain();
+function playNote(audio, midiNote, offsetSeconds, durationSeconds, voice, gainAmount = 0.18) {
+  const start = audio.currentTime + offsetSeconds;
+  const frequency = 440 * Math.pow(2, (midiNote - 69) / 12);
+  const output = audio.createGain();
   const filter = audio.createBiquadFilter();
+  const tone = getVoiceDefinition(voice);
 
-  oscillator.type = waveType;
-  oscillator.frequency.value = 440 * Math.pow(2, (midiNote - 69) / 12);
+  output.gain.setValueAtTime(0.0001, start);
+  output.gain.exponentialRampToValueAtTime(gainAmount, start + tone.attack);
+  output.gain.exponentialRampToValueAtTime(gainAmount * tone.sustain, start + Math.max(tone.attack + 0.06, durationSeconds * 0.45));
+  output.gain.exponentialRampToValueAtTime(0.0001, start + durationSeconds);
+
   filter.type = 'lowpass';
-  filter.frequency.value = waveType === 'square' ? 1800 : 2600;
+  filter.frequency.setValueAtTime(tone.filter, start);
+  filter.Q.value = tone.q;
 
-  gain.gain.setValueAtTime(0.0001, audio.currentTime + offsetSeconds);
-  gain.gain.exponentialRampToValueAtTime(gainAmount, audio.currentTime + offsetSeconds + 0.03);
-  gain.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + offsetSeconds + durationSeconds);
+  tone.partials.forEach((partial) => {
+    const osc = audio.createOscillator();
+    const partialGain = audio.createGain();
 
-  oscillator.connect(filter);
-  filter.connect(gain);
-  gain.connect(audio.destination);
+    osc.type = partial.type;
+    osc.frequency.setValueAtTime(frequency * partial.ratio, start);
+    if (partial.detune) osc.detune.setValueAtTime(partial.detune, start);
 
-  oscillator.start(audio.currentTime + offsetSeconds);
-  oscillator.stop(audio.currentTime + offsetSeconds + durationSeconds + 0.05);
+    partialGain.gain.setValueAtTime(partial.gain, start);
+    osc.connect(partialGain);
+    partialGain.connect(filter);
+
+    osc.start(start);
+    osc.stop(start + durationSeconds + tone.release);
+  });
+
+  filter.connect(output);
+  output.connect(audio.destination);
+}
+
+function getVoiceDefinition(voice) {
+  const voices = {
+    warm: {
+      attack: 0.02,
+      sustain: 0.52,
+      release: 0.2,
+      filter: 2400,
+      q: 0.7,
+      partials: [
+        { type: 'triangle', ratio: 1, gain: 0.72 },
+        { type: 'sine', ratio: 2, gain: 0.18, detune: 3 },
+        { type: 'sine', ratio: 0.5, gain: 0.12 },
+      ],
+    },
+    bell: {
+      attack: 0.005,
+      sustain: 0.32,
+      release: 0.35,
+      filter: 4200,
+      q: 1.3,
+      partials: [
+        { type: 'sine', ratio: 1, gain: 0.65 },
+        { type: 'sine', ratio: 2.01, gain: 0.24 },
+        { type: 'sine', ratio: 3.97, gain: 0.12 },
+      ],
+    },
+    organ: {
+      attack: 0.01,
+      sustain: 0.82,
+      release: 0.12,
+      filter: 3000,
+      q: 0.9,
+      partials: [
+        { type: 'sine', ratio: 1, gain: 0.58 },
+        { type: 'sine', ratio: 2, gain: 0.22 },
+        { type: 'triangle', ratio: 4, gain: 0.08 },
+      ],
+    },
+    sine: {
+      attack: 0.02,
+      sustain: 0.7,
+      release: 0.12,
+      filter: 2800,
+      q: 0.8,
+      partials: [
+        { type: 'sine', ratio: 1, gain: 0.8 },
+      ],
+    },
+  };
+
+  return voices[voice] || voices.warm;
 }
 
 function updateProgress(isCorrect) {

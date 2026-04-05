@@ -7,7 +7,7 @@ Current features:
 - interval recognition
 - chord quality identification
 - scale / mode identification
-- clean Web Audio playback
+- improved layered Web Audio playback with warmer synthesized voices
 - replay and root reference playback
 - local streak and progress tracking
 - responsive interface for desktop and mobile
