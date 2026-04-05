@@ -1,12 +1,16 @@
 # Earfrog
 
-A focused ear training web app for musicians.
+A focused ear training web app built around more interesting listening rounds instead of only plain multiple choice.
 
 Current features:
 
 - interval recognition
 - chord quality identification
 - scale / mode identification
+- three round types:
+  - classic identify
+  - elimination round
+  - landmark compare
 - improved layered Web Audio playback with warmer synthesized voices
 - replay and root reference playback
 - local streak and progress tracking
@@ -22,13 +26,13 @@ Then open <http://localhost:8000>
 
 ## Direction
 
-This version is intentionally more musical and serious: cleaner language, calmer visuals, and a stronger practice-first feel.
+This version is designed to feel more like active listening practice and less like a shallow tap-the-answer quiz.
 
 ## Good next upgrades
 
-- piano or sampled instrument playback
-- melodic dictation
-- rhythm training
-- adaptive review / spaced repetition
-- session summaries and weak-spot tracking
+- real sampled piano playback
+- melodic dictation mode
+- rhythm rounds
+- mistake review mode
+- spaced repetition on weak categories
 - GitHub Pages deployment

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Earfrog — Focused Ear Training</title>
+    <title>Earfrog — Listening Rounds</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -17,13 +17,13 @@
       <header class="hero card">
         <div class="hero-copy-wrap">
           <p class="eyebrow">EARFROG</p>
-          <h1>Focused ear training for real musicianship.</h1>
+          <h1>Listening rounds, not just multiple choice.</h1>
           <p class="hero-copy">
-            Train interval recognition, chord quality, and scale hearing with clean playback, clear practice flow,
-            and lightweight progress tracking.
+            Practice through structured rounds: hear the reference, hear the target, narrow your choices, and commit.
+            More like actual listening, less like tapping random buttons.
           </p>
           <div class="hero-actions">
-            <button id="heroStartBtn" class="primary-btn">Start practice</button>
+            <button id="heroStartBtn" class="primary-btn">Start round</button>
             <button id="dailyChallengeBtn" class="secondary-btn">Focused set</button>
           </div>
         </div>
@@ -81,21 +81,25 @@
             </select>
           </div>
 
-          <div class="control-row two-up">
-            <button id="newQuestionBtn" class="primary-btn">New example</button>
-            <button id="replayBtn" class="secondary-btn">Replay</button>
+          <div class="control-group">
+            <label for="roundModeSelect">Round type</label>
+            <select id="roundModeSelect">
+              <option value="classic">Classic identify</option>
+              <option value="elimination">Elimination round</option>
+              <option value="landmark">Landmark compare</option>
+            </select>
           </div>
 
           <div class="tip-box quest-box">
             <strong>Practice note</strong>
-            <span id="questText">Use replay when needed. Careful listening matters more than speed.</span>
+            <span id="questText">Use reference and replay deliberately. Try to hear character before naming it.</span>
           </div>
         </section>
 
         <section class="card challenge-panel">
           <div class="section-head">
             <div>
-              <p class="eyebrow">CURRENT EXERCISE</p>
+              <p class="eyebrow">CURRENT ROUND</p>
               <h2 id="exerciseTitle">Interval recognition</h2>
             </div>
             <div class="pill-stack">
@@ -104,20 +108,41 @@
             </div>
           </div>
 
+          <div class="round-steps" id="roundSteps">
+            <div class="step active">1. Reference</div>
+            <div class="step">2. Target</div>
+            <div class="step">3. Decide</div>
+          </div>
+
           <p id="promptText" class="prompt-text">
-            Press <strong>New example</strong> to hear the first prompt.
+            Start a round to hear the prompt and work through it.
           </p>
 
-          <div class="transport-row">
-            <button id="playBtn" class="primary-btn">▶ Play</button>
-            <button id="playReferenceBtn" class="ghost-btn">Play root</button>
+          <div class="transport-row three-up">
+            <button id="playReferenceBtn" class="ghost-btn">Play reference</button>
+            <button id="playBtn" class="primary-btn">Play target</button>
+            <button id="replayBtn" class="secondary-btn">Replay round</button>
+          </div>
+
+          <div id="landmarkPanel" class="landmark-panel hidden">
+            <strong>Landmark comparison</strong>
+            <p>Compare the target against a known landmark before answering.</p>
+            <div class="transport-row two-up">
+              <button id="landmarkA" class="ghost-btn">Play landmark A</button>
+              <button id="landmarkB" class="ghost-btn">Play landmark B</button>
+            </div>
           </div>
 
           <div id="answerGrid" class="answer-grid"></div>
 
+          <div class="submit-row">
+            <button id="submitAnswerBtn" class="primary-btn">Submit answer</button>
+            <button id="newQuestionBtn" class="ghost-btn">New round</button>
+          </div>
+
           <div id="feedbackBox" class="feedback-box neutral">
             <strong>Status:</strong>
-            <span>Waiting for your first example.</span>
+            <span>Waiting for your first round.</span>
           </div>
         </section>
 
@@ -147,12 +172,11 @@
           </div>
 
           <div class="mini-card">
-            <h3>Practice guidance</h3>
+            <h3>Round types</h3>
             <ul>
-              <li>Intervals are played melodically, one note after another.</li>
-              <li>Chords are played harmonically, with notes stacked together.</li>
-              <li>Scales and modes are presented in ascending form.</li>
-              <li>Short, attentive sessions usually beat long unfocused ones.</li>
+              <li><strong>Classic identify:</strong> hear it, then choose the answer.</li>
+              <li><strong>Elimination round:</strong> remove wrong answers before committing.</li>
+              <li><strong>Landmark compare:</strong> compare target against two reference landmarks.</li>
             </ul>
           </div>
         </section>
