@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EarForge — Ear Training</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero card">
+        <div>
+          <p class="eyebrow">EARFORGE</p>
+          <h1>Train your ear like an instrument.</h1>
+          <p class="hero-copy">
+            Fast, musical drills for intervals, chords, and scales. No login. Just press play and answer.
+          </p>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-label">Streak</span>
+            <strong id="streakValue">0 days</strong>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Accuracy</span>
+            <strong id="accuracyValue">0%</strong>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Total correct</span>
+            <strong id="correctValue">0</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-grid">
+        <section class="card control-panel">
+          <div class="section-head">
+            <h2>Session setup</h2>
+            <button id="resetProgressBtn" class="ghost-btn">Reset progress</button>
+          </div>
+
+          <div class="control-group">
+            <label for="exerciseSelect">Exercise</label>
+            <select id="exerciseSelect">
+              <option value="interval">Interval recognition</option>
+              <option value="chord">Chord quality</option>
+              <option value="scale">Scale / mode</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label for="difficultySelect">Difficulty</label>
+            <select id="difficultySelect">
+              <option value="easy">Easy</option>
+              <option value="medium" selected>Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label for="instrumentSelect">Sound</label>
+            <select id="instrumentSelect">
+              <option value="sine">Pure tone</option>
+              <option value="triangle">Soft synth</option>
+              <option value="square">Bright synth</option>
+            </select>
+          </div>
+
+          <div class="control-row two-up">
+            <button id="newQuestionBtn" class="primary-btn">New challenge</button>
+            <button id="replayBtn" class="secondary-btn">Replay</button>
+          </div>
+
+          <div class="tip-box">
+            <strong>Minimum useful habit:</strong>
+            <span>Do 10 focused questions a day. Consistency beats marathon sessions.</span>
+          </div>
+        </section>
+
+        <section class="card challenge-panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">CURRENT ROUND</p>
+              <h2 id="exerciseTitle">Interval recognition</h2>
+            </div>
+            <div class="pill" id="questionCounter">0 answered</div>
+          </div>
+
+          <p id="promptText" class="prompt-text">
+            Press <strong>New challenge</strong> to hear the first example.
+          </p>
+
+          <div class="transport-row">
+            <button id="playBtn" class="primary-btn">▶ Play</button>
+            <button id="playReferenceBtn" class="ghost-btn">Play root</button>
+          </div>
+
+          <div id="answerGrid" class="answer-grid"></div>
+
+          <div id="feedbackBox" class="feedback-box neutral">
+            <strong>Status:</strong>
+            <span>Waiting for your first challenge.</span>
+          </div>
+        </section>
+
+        <section class="card insights-panel">
+          <div class="section-head">
+            <h2>Progress</h2>
+            <div class="pill" id="levelPill">Level: medium</div>
+          </div>
+
+          <div class="progress-list">
+            <div class="progress-row">
+              <span>Today</span>
+              <strong id="todayCount">0 questions</strong>
+            </div>
+            <div class="progress-row">
+              <span>Best streak</span>
+              <strong id="bestStreak">0 days</strong>
+            </div>
+            <div class="progress-row">
+              <span>Current exercise</span>
+              <strong id="exerciseAccuracy">0% correct</strong>
+            </div>
+          </div>
+
+          <div class="mini-card">
+            <h3>How this works</h3>
+            <ul>
+              <li>Intervals play two notes in sequence.</li>
+              <li>Chords play notes stacked together.</li>
+              <li>Scales / modes play ascending patterns.</li>
+              <li>Everything saves locally in your browser.</li>
+            </ul>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
